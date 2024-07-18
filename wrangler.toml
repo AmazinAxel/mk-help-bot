@@ -1,0 +1,9 @@
+name = "discord-slash-demo"
+compatibility_date = "2023-05-18"
+main = "./src/server.js"
+# update package.json too with main
+
+# [secrets]
+# DISCORD_TOKEN = 
+# DISCORD_PUBLIC_KEY = 
+# DISCORD_APPLICATION_ID = 

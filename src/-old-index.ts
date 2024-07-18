@@ -1,0 +1,118 @@
+// Import Discord command types
+import {
+  createSlashCommandHandler,
+  ApplicationCommand,
+  InteractionHandler,
+  Interaction,
+  InteractionResponse,
+  InteractionResponseType,
+  EmbedType,
+  ApplicationCommandOptionType,
+} from '@glenstack/cf-workers-discord-bot'
+
+interface Env {
+  envvar1: string;
+  envvar2: string;
+}
+
+/*
+    TODO LIST
+  - use enums instead of json object list for better perf
+  - add more articles
+  - ping option for notifying users
+  - switch away from using commands and use user applications instead
+  - switch to TS for main proj
+  */
+
+const helpCommand: ApplicationCommand = {
+  name: 'help',
+  description: 'help',
+  options: [
+    {
+      name: 'cracked',
+      description: '',
+      type: ApplicationCommandOptionType.STRING,
+      required: false,
+      choices: [
+        // When adding a new help article, add its name here
+        // and add the article content in the section below
+        {
+          name: 'cantconnect',
+          value: 'cantconnect'
+        },
+        {
+          name: 'cracked',
+          value: 'cracked',
+        },
+        {
+          name: 'howto',
+          value: 'howto',
+        },
+        {
+          name: 'linking',
+          value: 'linking',
+        },
+        {
+          name: '1.21',
+          value: '1.21'
+        },
+        {
+          name: 'bedrock',
+          value: 'bedrock', // Make note NOT to install geyser on playerserver
+        },
+        {
+          name: 'mods',
+          value: 'mods'
+        },
+        {
+          name: 'plugins',
+          value: 'plugins'
+        },
+        {
+          name: 'staffapps',
+          value: 'staffapps'
+        }
+      ],
+    }
+  ],
+}
+
+const helpHandler: InteractionHandler = async (
+  interaction: Interaction,
+): Promise<InteractionResponse> => {
+  const userID = interaction.member.user.id
+  const options = interaction.data.options
+  const optionType = options && options[0].value
+  //const optionBaby = (options && options[1] && options[1].value) || false
+
+  return {
+    type: InteractionResponseType.ChannelMessageWithSource,
+    data: {
+      content: `<@${userID}>`,
+      allowed_mentions: {
+        users: [userID],
+      },
+      embeds: [
+        {
+          title: `Here's a cute ${optionType} picture:`,
+          description: ``,
+          type: EmbedType.rich,
+          color: 0
+        }
+      ]
+    }
+  }
+}
+
+const slashCommandHandler = createSlashCommandHandler({
+  applicationID: '807286816532987906',
+  applicationSecret: APPLICATION_SECRET, // You should store this in a secret
+  publicKey: '62394bf3e9a8572b9aeb302aa7fb315095ec1305c80b9916babd5c2c6e202c44',
+  commands: [[helpCommand, helpHandler]],
+})
+
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    return new Response(slashCommandHandler(request, env) { status: 200 });
+  }
+}
