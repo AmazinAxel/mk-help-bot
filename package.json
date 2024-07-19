@@ -2,10 +2,10 @@
   "name": "minekeep-help-bot",
   "version": "1.0.0",
   "description": "Discord bot showing embedded help messages using commands",
-  "main": "src/server.js",
+  "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "start": "wrangler dev",
+    "start": "wrangler dev --env=dev",
     "ngrok": "ngrok http 8787",
 		"lint": "prettier --check plugin-search-dir=. . && eslint .",
 		"format": "prettier --write .",

@@ -1,7 +1,7 @@
-name = "discord-slash-demo"
+name = "minekeep-help-bot"
 compatibility_date = "2023-05-18"
-main = "./src/server.js"
-# update package.json too with main
+main = "./src/index.js"
+# update package.json if updating main=
 
 # [secrets]
 # DISCORD_TOKEN = 

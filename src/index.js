@@ -11,6 +11,7 @@ import {
 import { AWW_COMMAND, INVITE_COMMAND } from './commands.js';
 import { getCuteUrl } from './reddit.js';
 import { InteractionResponseFlags } from 'discord-interactions';
+import { regscript } from './regscript.js'
 
 class JsonResponse extends Response {
   constructor(body, init) {
@@ -26,12 +27,19 @@ class JsonResponse extends Response {
 
 const router = AutoRouter();
 
-/**
- * A simple :wave: hello page to verify the worker is working.
+/*
+ * Only register the commandreg script if
+ * this on localdev otherwise it could be abused!
  */
-router.get('/', (request, env) => {
-  return new Response(`👋 ${env.DISCORD_APPLICATION_ID}`);
-});
+if (env.env == 'dev') {
+  router.get('/', (env) => {
+    return new Response(regscript(env));
+  });
+} else {
+  router.get('/', () => {
+    return new Response('👋 Minekeep Discord help bot endpoint\nGive your feedback and suggestions to a Minekeep staff member so we can improve!');
+  });  
+}
 
 /**
  * Main route for all requests sent from Discord.  All incoming messages will
@@ -86,7 +94,7 @@ router.post('/', async (request, env) => {
   console.error('Unknown Type');
   return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
 });
-router.all('*', () => new Response('Not Found.', { status: 404 }));
+router.all('*', () => new Response('Endpoint Not Found', { status: 404 }));
 
 async function verifyDiscordRequest(request, env) {
   const signature = request.headers.get('x-signature-ed25519');

@@ -1,3 +1,10 @@
+/*
+
+!! DO NOT USE
+THIS CODE IS TO BE REMOVED AFTER MIGRATION TO NEW COMMAND SYSTEM
+
+*/
+
 // Import Discord command types
 import {
   createSlashCommandHandler,
