@@ -1,16 +1,10 @@
-/**
- * The core server that runs on a Cloudflare worker.
- */
-
 import { AutoRouter } from 'itty-router';
 import {
   InteractionResponseType,
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import { AWW_COMMAND, INVITE_COMMAND } from './commands.js';
-import { getCuteUrl } from './reddit.js';
-import { InteractionResponseFlags } from 'discord-interactions';
+//import { InteractionResponseFlags } from 'discord-interactions';
 import { regscript } from './regscript.js'
 
 class JsonResponse extends Response {
@@ -18,32 +12,28 @@ class JsonResponse extends Response {
     const jsonBody = JSON.stringify(body);
     init = init || {
       headers: {
-        'content-type': 'application/json;charset=UTF-8',
-      },
+        'content-type': 'application/json;charset=UTF-8'
+      }
     };
     super(jsonBody, init);
-  }
-}
+  };
+};
 
 const router = AutoRouter();
 
 /*
  * Only register the commandreg script if
- * this on localdev otherwise it could be abused!
+ * on localdev, otherwise it may be abused
  */
-if (env.env == 'dev') {
-  router.get('/', (env) => {
-    return new Response(regscript(env));
-  });
-} else {
-  router.get('/', () => {
-    return new Response('👋 Minekeep Discord help bot endpoint\nGive your feedback and suggestions to a Minekeep staff member so we can improve!');
-  });  
-}
+router.get('/', async (env, vars) => {
+  return (vars.DEV)
+  ? new Response(await regscript(env))
+  : new Response('👋 Minekeep Discord help bot endpoint\nGive your feedback and suggestions to a Minekeep staff member so we can improve!');
+});
 
-/**
- * Main route for all requests sent from Discord.  All incoming messages will
- * include a JSON payload described here:
+/*
+ * Main route for all requests recieved by Discord
+ * Incoming JSON payload docs:
  * https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object
  */
 router.post('/', async (request, env) => {
@@ -51,48 +41,27 @@ router.post('/', async (request, env) => {
     request,
     env,
   );
-  if (!isValid || !interaction) {
-    return new Response('Bad request signature.', { status: 401 });
-  }
+  if (!isValid || !interaction)
+    return new Response('Bad request signature', { status: 401 });
 
+  // Ping required during the initial webhook handshake
+  // to configure the webhook in the developer portal
   if (interaction.type === InteractionType.PING) {
-    // The `PING` message is used during the initial webhook handshake, and is
-    // required to configure the webhook in the developer portal.
     return new JsonResponse({
       type: InteractionResponseType.PONG,
     });
   }
 
+  // Handle user command and reply with the data
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
-    // Most user commands will come as `APPLICATION_COMMAND`.
-    switch (interaction.data.name.toLowerCase()) {
-      case AWW_COMMAND.name.toLowerCase(): {
-        const cuteUrl = await getCuteUrl();
-        return new JsonResponse({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: cuteUrl,
-          },
-        });
-      }
-      case INVITE_COMMAND.name.toLowerCase(): {
-        const applicationId = env.DISCORD_APPLICATION_ID;
-        const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${applicationId}&scope=applications.commands`;
-        return new JsonResponse({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: INVITE_URL,
-            flags: InteractionResponseFlags.EPHEMERAL,
-          },
-        });
-      }
-      default:
-        return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
-    }
-  }
-
-  console.error('Unknown Type');
-  return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
+    interaction.data.name.toLowerCase()
+    return new JsonResponse({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        content: 'Hello! This works!!!! line 65',
+      },
+    });
+  };
 });
 router.all('*', () => new Response('Endpoint Not Found', { status: 404 }));
 

@@ -3,7 +3,13 @@ compatibility_date = "2023-05-18"
 main = "./src/index.js"
 # update package.json if updating main=
 
+vars = { DEV = false }
 # [secrets]
 # DISCORD_TOKEN = 
 # DISCORD_PUBLIC_KEY = 
 # DISCORD_APPLICATION_ID = 
+
+# For development, automatically used on localdev
+[env.dev]
+
+vars = { DEV = true }
