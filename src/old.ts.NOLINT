@@ -1,7 +1,7 @@
 /*
 
 !! DO NOT USE
-THIS CODE IS TO BE REMOVED AFTER MIGRATION TO NEW COMMAND SYSTEM
+!! THIS IS TO BE REMOVED AFTER MIGRATION TO TYPESCRIPT
 
 */
 
@@ -21,15 +21,6 @@ interface Env {
   envvar1: string;
   envvar2: string;
 }
-
-/*
-    TODO LIST
-  - use enums instead of json object list for better perf
-  - add more articles
-  - ping option for notifying users
-  - switch away from using commands and use user applications instead
-  - switch to TS for main proj
-  */
 
 const helpCommand: ApplicationCommand = {
   name: 'help',

@@ -1,7 +1,19 @@
 import { AutoRouter } from 'itty-router';
 import { InteractionResponseType, InteractionType, verifyKey } from 'discord-interactions';
-//import { InteractionResponseFlags } from 'discord-interactions';
 import { regscript } from './regscript.js';
+import { articleItems, articles } from './articles.js'
+
+/*
+ -- TODO LIST
+  - use an embed instead of posting plaintext
+  - add more articles
+  - ping option for notifying users
+  - switch away from using commands and use user applications instead
+    use option 3: https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
+  - use built-in router instead of using AutoRouter/itty-router
+    for reducing CPU time and better performance
+  - convert to Typescript for better type safety
+*/
 
 class JsonResponse extends Response {
 	constructor(body, init) {
@@ -21,22 +33,21 @@ const router = AutoRouter();
  * Only register the commandreg script if
  * on localdev, otherwise it may be abused
  */
-router.get('/', async (env, vars) => {
+router.get('/', async (vars) => {
 	return vars.DEV
-		? new Response(await regscript(env))
+		? new Response(await regscript(vars))
 		: new Response(
 				'👋 Minekeep Discord help bot endpoint\nGive your feedback and suggestions to a Minekeep staff member so we can improve!'
 			);
 });
 
 /*
- * Main route for all requests recieved by Discord
- * Incoming JSON payload docs:
+ * Routing for all Discord requests following this JSON payload:
  * https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object
  */
-router.post('/', async (request, env) => {
-	const { isValid, interaction } = await server.verifyDiscordRequest(request, env);
-	if (!isValid || !interaction) return new Response('Bad request signature', { status: 401 });
+router.post('/', async (request, vars) => {
+	const { isValid, interaction } = await server.verifyDiscordRequest(request, vars);
+	if (!isValid || !interaction) return new Response('Bad request signature', 401);
 
 	// Ping required during the initial webhook handshake
 	// to configure the webhook in the developer portal
@@ -47,36 +58,41 @@ router.post('/', async (request, env) => {
 	}
 
 	// Handle user command and reply with the data
-	if (interaction.type === InteractionType.APPLICATION_COMMAND) {
-		interaction.data.name.toLowerCase();
+	else if (interaction.type === InteractionType.APPLICATION_COMMAND) {
+		const article = articleItems.indexOf(interaction.data.options[0].value);
+
+		if (article == -1) return new Response('Bad request - article not found', 404)
+		
 		return new JsonResponse({
 			type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 			data: {
-				content: 'Hello! This works!!!! line 65'
+				content: articles[article]
 			}
 		});
 	}
 });
-router.all('*', () => new Response('Endpoint Not Found', { status: 404 }));
+router.all('*', () => new Response('Endpoint not found', 404));
 
-async function verifyDiscordRequest(request, env) {
+/*
+ * Verify request to make sure Discord is the proper sender
+ * to prevent attacks and possible exceptions
+ */
+async function verifyDiscordRequest(request, vars) {
 	const signature = request.headers.get('x-signature-ed25519');
 	const timestamp = request.headers.get('x-signature-timestamp');
 	const body = await request.text();
 	const isValidRequest =
 		signature &&
 		timestamp &&
-		(await verifyKey(body, signature, timestamp, env.DISCORD_PUBLIC_KEY));
-	if (!isValidRequest) {
+		(await verifyKey(body, signature, timestamp, vars.DISCORD_PUBLIC_KEY));
+	if (!isValidRequest)
 		return { isValid: false };
-	}
-
-	return { interaction: JSON.parse(body), isValid: true };
+	return { isValid: true, interaction: JSON.parse(body) };
 }
 
+// Create router and request handler
 const server = {
 	verifyDiscordRequest,
 	fetch: router.fetch
 };
-
 export default server;

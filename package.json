@@ -1,18 +1,17 @@
 {
 	"name": "minekeep-help-bot",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Discord bot showing embedded help messages using commands",
 	"main": "src/index.js",
 	"type": "module",
 	"scripts": {
-		"dev": "wrangler dev --env dev",
-		"ngrok": "ngrok http 8787",
+		"dev": "wrangler dev --env=dev --port=4040",
+		"ngrok": "ngrok http 4040",
 		"lint": "prettier --check plugin-search-dir=. . && eslint .",
 		"format": "prettier --write .",
-		"publish": "wrangler deploy"
+		"deploy": "wrangler deploy"
 	},
 	"author": "AmazinAxel",
-	"license": "GPL-3.0",
 	"homepage": "https://github.com/AmazinAxel/discord-message-formatter",
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20240312.0",

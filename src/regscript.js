@@ -1,26 +1,38 @@
-/* regscript.js
- * Command registry script:
+/*
+ * Helper command registry script -
  * registers all available commands
  */
+import { articleItems } from './articles.js'
 
-export async function regscript(env) {
+export async function regscript(vars) {
 	// Help command shown in the slash commands list
-	const helpcmd = {
+	const helpcmd = [{
 		name: 'help',
-		description: 'Display a commonly-asked help article.'
-	};
+		description: 'Display an informational help article about a certain topic.',
+		options: [{
+			name: 'articletype',
+			description: 'Select an article to show',
+			type: 3,
+			required: true,
+			choices: articleItems.map((item) => ({
+				name: item,
+				value: item
+			})),
+			autoComplete: true
+		}]
+	}];
 
 	// Get env vars for authentication
-	const token = env.DISCORD_TOKEN;
-	const applicationId = env.DISCORD_APPLICATION_ID;
+	const token = vars.DISCORD_TOKEN;
+	const applicationID = vars.DISCORD_APPLICATION_ID;
 
 	// Confirm required env vars are properly set
 	if (!token) return 'Missing DISCORD_TOKEN env var';
-	if (!applicationId) return 'Missing DISCORD_APPLICATION_ID env var';
+	if (!applicationID) return 'Missing DISCORD_APPLICATION_ID env var';
 
 	// Register command(s)
 	const response = await fetch(
-		`https://discord.com/api/v10/applications/${applicationId}/commands`,
+		`https://discord.com/api/v10/applications/${applicationID}/commands`,
 		{
 			headers: {
 				'Content-Type': 'application/json',
@@ -33,7 +45,7 @@ export async function regscript(env) {
 
 	// Get response status
 	if (response.ok) {
-		return "Registered all commands successfully! Use 'bun run deploy' to deploy";
+		return "Registered all commands successfully! Use 'bun run deploy' to deploy.\nNOTE: Do not rerun this script or you will be rate-limited!";
 	} else {
 		// Throw descriptive error if it fails
 		let errorText = `Error registering commands \n ${response.url}: ${response.status} ${response.statusText}`;
