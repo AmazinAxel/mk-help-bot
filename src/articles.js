@@ -15,42 +15,42 @@ export const articleItems = [
 
 export const articles = [
     // Can't connect
-    `# Can't connect to Minekeep
+    `### Can't connect to Minekeep
     content goes here (\`this works\` *(and even **this!**)*)`,
 
     // Cracked accounts
-    `# Cracked accounts are __not__ supported on Minekeep
+    `### Cracked accounts are __not__ supported on Minekeep
     Cracked accounts cant join Minekeep [more info here]`,
     
     // How to make a server
-    `# How do I make a server?
+    `### How do I make a server?
     content goes here`,
 
     // Linking your account
-    `# How to link your account:
+    `### How to link your account:
     Cracked accounts cannot be used to link Minekeep accounts [more info about why here]`,
 
     // 1.21 support
-    `# 1.21 support is experimental
+    `### 1.21 support is experimental
     Use 1.21 builds with caution! [more info here]`,
 
     // Bedrock support
-    `# Bedrock support is currently broken
+    `### Bedrock support is currently broken
     We do not have an ETA at this moment [more info here]`,
 
     // Mod support
-    `# Minekeep does not support Forge or Fabric
+    `### Minekeep does not support Forge or Fabric
     Mods are not supported on Minekeep currently [more info here]`,
 
     // How to install plugins
-    `# How to install plugins?
+    `### How to install plugins?
     More info here`,
 
     // Staff application policy
-    `# Minekeep Staff Application Policy
+    `### Minekeep Staff Application Policy
     We do not have an application form. [more info here]`,
 
     // Servers are not 24/7
-    `# Minekeep servers can be started at any time
-    However, they are __not__ 24/7.`
+    `### Minekeep servers can be started at any time
+    However, they are __not__ 24/7. [more info here]`
 ]
