@@ -5,7 +5,7 @@
 	"main": "src/index.js",
 	"type": "module",
 	"scripts": {
-		"dev": "wrangler dev --env=dev --port=4040",
+		"dev": "wrangler dev --env dev --port=4040",
 		"ngrok": "ngrok http 4040",
 		"lint": "prettier --check plugin-search-dir=. . && eslint .",
 		"format": "prettier --write .",

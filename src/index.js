@@ -1,18 +1,17 @@
 import { AutoRouter } from 'itty-router';
 import { InteractionResponseType, InteractionType, verifyKey } from 'discord-interactions';
 import { regscript } from './regscript.js';
-import { articleItems, articles } from './articles.js'
+import { articleItems, articles } from './articles.js';
 
 /*
  -- TODO LIST
-  - use an embed instead of posting plaintext
-  - add more articles
+  - use an embed instead of posting a plaintext message
   - ping option for notifying users
   - switch away from using commands and use user applications instead
-    use option 3: https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
+    note: use option 3: https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
   - use built-in router instead of using AutoRouter/itty-router
     for reducing CPU time and better performance
-  - convert to Typescript for better type safety
+  - convert to Typescript for better type safety (optional)
 */
 
 class JsonResponse extends Response {
@@ -33,11 +32,11 @@ const router = AutoRouter();
  * Only register the commandreg script if
  * on localdev, otherwise it may be abused
  */
-router.get('/', async (vars) => {
-	return vars.DEV
+router.get('/', async (vars, env) => {
+	return env.DEV
 		? new Response(await regscript(vars))
 		: new Response(
-				'👋 Minekeep Discord help bot endpoint\nGive your feedback and suggestions to a Minekeep staff member so we can improve!'
+				'👋 Minekeep Discord help bot endpoint\nGive feedback and suggestions regarding this bot to a Minekeep staff member so we can improve!'
 			);
 });
 
@@ -57,19 +56,19 @@ router.post('/', async (request, vars) => {
 		});
 	}
 
-	// Handle user command and reply with the data
+	// Handle command and reply with the proper article
 	else if (interaction.type === InteractionType.APPLICATION_COMMAND) {
 		const article = articleItems.indexOf(interaction.data.options[0].value);
 
-		if (article == -1) return new Response('Bad request - article not found', 404)
-		
+		if (article == -1) return new Response('Bad request - article not found', 404);
+
 		return new JsonResponse({
 			type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 			data: {
-				content: articles[article]
+				embeds: [{ description: articles[article] }]
 			}
 		});
-	}
+	};
 });
 router.all('*', () => new Response('Endpoint not found', 404));
 
@@ -85,12 +84,11 @@ async function verifyDiscordRequest(request, vars) {
 		signature &&
 		timestamp &&
 		(await verifyKey(body, signature, timestamp, vars.DISCORD_PUBLIC_KEY));
-	if (!isValidRequest)
-		return { isValid: false };
+	if (!isValidRequest) return { isValid: false };
 	return { isValid: true, interaction: JSON.parse(body) };
 }
 
-// Create router and request handler
+// Create request router and verifier
 const server = {
 	verifyDiscordRequest,
 	fetch: router.fetch

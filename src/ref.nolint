@@ -3,7 +3,7 @@
 !! DO NOT USE
 !! THIS IS TO BE REMOVED AFTER MIGRATION TO TYPESCRIPT
 
-*/
+
 
 // Import Discord command types
 import {
@@ -114,3 +114,4 @@ export default {
     return new Response(slashCommandHandler(request, env) { status: 200 });
   }
 }
+*/

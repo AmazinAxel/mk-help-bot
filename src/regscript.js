@@ -2,25 +2,29 @@
  * Helper command registry script -
  * registers all available commands
  */
-import { articleItems } from './articles.js'
+import { articleItems } from './articles.js';
 
 export async function regscript(vars) {
 	// Help command shown in the slash commands list
-	const helpcmd = [{
-		name: 'help',
-		description: 'Display an informational help article about a certain topic.',
-		options: [{
-			name: 'articletype',
-			description: 'Select an article to show',
-			type: 3,
-			required: true,
-			choices: articleItems.map((item) => ({
-				name: item,
-				value: item
-			})),
-			autoComplete: true
-		}]
-	}];
+	const helpcmd = [
+		{
+			name: 'help',
+			description: 'Display an informational help article about a certain topic.',
+			options: [
+				{
+					name: 'articletype',
+					description: 'Select an article to show',
+					type: 3,
+					required: true,
+					choices: articleItems.map((item) => ({
+						name: item,
+						value: item
+					})),
+					autoComplete: true
+				}
+			]
+		}
+	];
 
 	// Get env vars for authentication
 	const token = vars.DISCORD_TOKEN;

@@ -12,11 +12,12 @@ Use `bunx wrangler secret put DISCORD_TOKEN` and log in with Cloudflare. Do the 
 
 Go to the Installation tab and click 'copy' on the install tab. Open the link and add the bot to the server.
 
+Use `bun run dev` to start the dev server and visit the hosted link to register the command. Use `bun run deploy` to deploy the application to Cloudflare. Change the endpoint URL to point toward the Worker.
+
 ## 🧑‍💻 Useful commands
 
 `bun run deploy` **- deploy the worker**
 `bun run dev` - start the development server on :4040
-
 
 `bun run ngrok` - run an ngrok server for quick local development (requires dev server to be running)
 `bun run lint` - lint the codebase
