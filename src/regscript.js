@@ -21,7 +21,12 @@ export async function regscript(vars) {
 						value: item
 					})),
 					autoComplete: true
-				}
+				},
+				/*
+					name: 'mentionuser',
+					description: 'Ping a user within the embed'
+					type: IDEK
+				}*/
 			]
 		}
 	];

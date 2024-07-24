@@ -63,6 +63,7 @@ router.post('/', async (request, vars) => {
 		return new JsonResponse({
 			type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
 			data: {
+				//content: "<@USER ID GOES HERE TODO>"
 				embeds: [{ 
 					description: articles[article],
 					footer: {
