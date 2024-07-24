@@ -26,4 +26,4 @@ Use `bun run dev` to start the dev server and visit the hosted link to register 
 ## ❄️ NixOS development w/ Wrangler
 
 NixOS local development is partially broken due to an unset SSL_CERT_PATH pointer when using Wrangler for SSL authentication
-To fix this, simply export the proper path: `export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt` ((read more about Nix issues here)[https://github.com/scottwillmoore/cloudflare-workers-with-nix])
+To fix this, simply export the proper path: `export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt` ([read more about Nix issues here](https://github.com/scottwillmoore/cloudflare-workers-with-nix))
