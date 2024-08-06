@@ -30,12 +30,14 @@ const router = AutoRouter();
  * Only register the commandreg script if
  * on localdev, otherwise it may be abused
  */
-router.get('/', async (env) => {
-	return env.DEV
-		? new Response(await regscript(env))
-		: new Response(
-				'👋 Minekeep Discord help bot endpoint\nGive feedback and suggestions regarding this bot to a Minekeep staff member so we can improve!'
-			);
+router.get('/', () => {
+	return new Response(
+		'👋 Minekeep Discord help bot endpoint\nGive feedback and suggestions regarding this bot to a Minekeep staff member so we can improve!'
+	);
+});
+
+router.get('/registers', async (env) => {
+	return await regscript(env)
 });
 
 /*
