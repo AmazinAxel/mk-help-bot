@@ -20,7 +20,9 @@ export const articles = [
 
     // Cracked accounts
     `### Cracked accounts are __not__ supported on Minekeep
-    Cracked accounts cant join Minekeep [more info here]`,
+    Cracked accounts are not able to join on MineKeep due to Minecraft's EULA.
+    Please purchase an account from https://minecraft.net/ to join.
+    There is nothing you may do to ...`,
     
     // How to make a server
     `### How do I make a server?

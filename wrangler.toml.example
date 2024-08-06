@@ -3,8 +3,8 @@ compatibility_date = "2023-05-18"
 main = "./src/index.js"
 # update package.json if updating main to typescript
 
-vars = { DEV = false }
-
-# Development vars automatically set on localdev
-[env.dev]
-vars = { DEV = true }
+[vars]
+DEV = true
+DISCORD_PUBLIC_KEY = ""
+DISCORD_APPLICATION_ID = ""
+DISCORD_TOKEN = ""

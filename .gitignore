@@ -3,3 +3,4 @@ node_modules/
 
 # Don't include wrangler junk
 .wrangler/
+wrangler.toml

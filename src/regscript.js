@@ -4,7 +4,7 @@
  */
 import { articleItems } from './articles.js';
 
-export async function regscript(vars) {
+export async function regscript(env) {
 	// Help command shown in the slash commands list
 	const helpcmd = [
 		{
@@ -32,8 +32,8 @@ export async function regscript(vars) {
 	];
 
 	// Get env vars for authentication
-	const token = vars.DISCORD_TOKEN;
-	const applicationID = vars.DISCORD_APPLICATION_ID;
+	const token = env.DISCORD_TOKEN;
+	const applicationID = env.DISCORD_APPLICATION_ID;
 
 	// Confirm required env vars are properly set
 	if (!token) return 'Missing DISCORD_TOKEN env var';
