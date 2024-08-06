@@ -29,15 +29,14 @@ const router = AutoRouter();
 /*
  * Only register the commandreg script if
  * on localdev, otherwise it may be abused
+ * DO NOT REMOVE UNUSED REQUEST VARIABLE
  */
-router.get('/', () => {
-	return new Response(
-		'👋 Minekeep Discord help bot endpoint\nGive feedback and suggestions regarding this bot to a Minekeep staff member so we can improve!'
-	);
-});
-
-router.get('/registers', async (env) => {
-	return await regscript(env)
+router.get('/', async (request, vars) => {
+	return vars.DEV
+		? new Response(await regscript(vars))
+		: new Response(
+				'👋 Minekeep Discord help bot endpoint\nGive feedback and suggestions regarding this bot to a Minekeep staff member so we can improve!'
+			);
 });
 
 /*

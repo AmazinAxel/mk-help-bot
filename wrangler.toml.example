@@ -4,6 +4,14 @@ main = "./src/index.js"
 # update package.json if updating main to typescript
 
 [vars]
+DEV = true
+DISCORD_PUBLIC_KEY = ""
+DISCORD_APPLICATION_ID = ""
+DISCORD_TOKEN = ""
+
+# These variables are only applied for local development
+[env.dev.vars]
+DEV = true
 DISCORD_PUBLIC_KEY = ""
 DISCORD_APPLICATION_ID = ""
 DISCORD_TOKEN = ""
